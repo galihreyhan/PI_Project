@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Guard.com. - Tentang Aplikasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col justify-between">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <a href="/" class="text-xl font-bold tracking-tight text-slate-900">G-Guard<span class="text-indigo-600">Scan</span></a>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-sm font-medium">
+                    <a href="/" class="text-slate-500 hover:text-slate-900 transition py-5">Home</a>
+                    <a href="/riwayat" class="text-slate-500 hover:text-slate-900 transition py-5">Riwayat</a>
+                    <a href="/about" class="text-indigo-600 font-semibold border-b-2 border-indigo-600 py-5">About</a>
+                    <span class="h-4 w-[1px] bg-slate-300"></span>
+                    <span class="text-slate-600">Halo, <strong class="text-slate-900">{{ session['username'] }}</strong></span>
+                    <a href="/logout" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer">Keluar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-10 sm:px-6 lg:px-8 flex-grow w-full">
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-10 space-y-6">
+            <div class="text-center border-b border-slate-100 pb-5">
+                <h2 class="text-2xl font-bold text-slate-900">Tentang G.GuardScan</h2>
+                <p class="text-sm text-slate-500 mt-1">Sistem Pendeteksi Kemiripan Teks & Dokumen Otomatis</p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                    G.GuardScan ini adalah sistem Pendeteksi plagiarisme web yang di kembangkan dengan menggunakan metode Winnowing. Sistem bekerja dengan membandingkan teks dokumen (PDF, DOCX, TXT) yang telah diproses menggunakan library Sastrawi untuk mendapatkan kata dasar (Stemming).
+                </p>
+            
+                   <div style="margin-top: 30px; background: #EFEBE9; padding: 20px; border-radius: 10px;">
+        <p><b>Dosen Pembimbing:</b> </p>Dr. Antonius Angga Kurniawan, S.T., M.M.S.I.
+        <p><b>Dikembangkan Oleh:</b> Galih Reyhan Mahameru (50423528)</p>
+    </div>
+                
+            </div>
+
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center text-xs text-indigo-700 font-semibold">
+                Sistem Dikembangkan Menggunakan Flask Framework, Python 3, & ReportLab PDF Library.
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400 font-medium w-full">
+        &copy; G-GuardScan Pengolah Data Berbasis K-Gram dan Winnowing.
+    </footer>
+
+</body>
+</html>

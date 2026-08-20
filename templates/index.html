@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiPlagiaris.com - Sistem Deteksi Plagiarisme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        function switchInputMode(mode) {
+            const textSection = document.getElementById('text-input-section');
+            const fileSection = document.getElementById('file-input-section');
+            const inputType = document.getElementById('input_type');
+            const btnText = document.getElementById('btn-mode-text');
+            const btnFile = document.getElementById('btn-mode-file');
+
+            if (mode === 'file') {
+                textSection.style.display = 'none';
+                fileSection.style.display = 'grid';
+                inputType.value = 'file';
+                btnFile.className = "w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 bg-indigo-600 text-white shadow-md cursor-pointer";
+                btnText.className = "w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-600 hover:bg-white/50 cursor-pointer";
+            } else {
+                fileSection.style.display = 'none';
+                textSection.style.display = 'grid';
+                inputType.value = 'text';
+                btnText.className = "w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 bg-indigo-600 text-white shadow-md cursor-pointer";
+                btnFile.className = "w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-600 hover:bg-white/50 cursor-pointer";
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col justify-between">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <a href="/" class="text-xl font-bold tracking-tight text-slate-900">G-Guard
+                        <span class="text-indigo-600">Scan</span></a>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-sm font-medium">
+                    <a href="/" class="text-indigo-600 font-semibold border-b-2 border-indigo-600 py-5">Home</a>
+                    <a href="/riwayat" class="text-slate-500 hover:text-slate-900 transition py-5">Riwayat</a>
+                    <a href="/about" class="text-slate-500 hover:text-slate-900 transition py-5">About</a>
+                    <span class="h-4 w-[1px] bg-slate-300"></span>
+                    <span class="text-slate-600">Halo, <strong class="text-slate-900">{{ session['username'] }}</strong></span>
+                    <a href="/logout" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer">Keluar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-10 sm:px-6 lg:px-8 flex-grow w-full">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl uppercase">
+                Cek Persentase Plagiarisme Dokumen Anda
+            </h1>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="mb-6 p-4 rounded-xl text-sm font-medium border {% if category == 'success' %} bg-emerald-50 border-emerald-200 text-emerald-700 {% else %} bg-rose-50 border-rose-200 text-rose-700 {% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="flex p-1 bg-slate-200 rounded-xl max-w-md mx-auto mb-8 border border-slate-300/50">
+            <button type="button" id="btn-mode-text" onclick="switchInputMode('text')" class="w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 bg-indigo-600 text-white shadow-md cursor-pointer">
+                Teks Manual
+            </button>
+            <button type="button" id="btn-mode-file" onclick="switchInputMode('file')" class="w-full py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-600 hover:bg-white/50 cursor-pointer">
+                Unggah Berkas (PDF / TXT)
+            </button>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+            <input type="hidden" id="input_type" name="input_type" value="text">
+
+            <div id="text-input-section" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-3">
+                    <label class="font-semibold text-sm text-slate-900">Dokumen Asli</label>
+                    <textarea id="doc1" name="doc1" rows="10" class="w-full p-4 border border-slate-200 rounded-xl text-sm bg-slate-50/50 resize-none focus:outline-indigo-600" placeholder="Masukkan dokumen asli...">{{ doc1 }}</textarea>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-3">
+                    <label class="font-semibold text-sm text-slate-900">Dokumen Pembanding</label>
+                    <textarea id="doc2" name="doc2" rows="10" class="w-full p-4 border border-slate-200 rounded-xl text-sm bg-slate-50/50 resize-none focus:outline-indigo-600" placeholder="Masukkan teks pembanding...">{{ doc2 }}</textarea>
+                </div>
+            </div>
+
+            <div id="file-input-section" class="grid grid-cols-1 md:grid-cols-2 gap-8" style="display: none;">
+        <!-- PILIHAN 1: UNTUK DUA FILE TERPISAH (FITUR LAMA ANDA) -->
+        <div class="space-y-4 col-span-1 md:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
+          <h3 class="font-semibold text-sm text-slate-900 mb-2">Metode A: Perbandingan Dua File Terpisah</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border border-slate-200 rounded-xl p-4 text-center">
+              <label class="block font-medium text-xs text-slate-500 mb-2">Unggah Dokumen Asli (.pdf / .txt)</label>
+              <input type="file" name="file1" accept=".pdf,.txt" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+            </div>
+            <div class="border border-slate-200 rounded-xl p-4 text-center">
+              <label class="block font-medium text-xs text-slate-500 mb-2">Unggah Dokumen Uji (.pdf / .txt)</label>
+              <input type="file" name="file2" accept=".pdf,.txt" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+            </div>
+          </div>
+        </div>
+
+        <!-- PILIHAN 2: FITUR BARU MULTIPLE FILES (MASAL) -->
+        <div class="col-span-1 md:col-span-2 bg-indigo-50 border border-indigo-200 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[150px] shadow-sm">
+          <h3 class="font-bold text-sm text-indigo-900 mb-1">Metode B: Multiple Files Upload</h3>
+          <p class="text-xs text-indigo-700 mb-4">Seluruh file akan dibandingkan antar satu sama lain</p>
+          <!-- Perhatikan atribut multiple di bawah ini -->
+          <input type="file" name="multiple_files" accept=".pdf,.txt" multiple class="block text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+        </div>
+      </div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-12 rounded-xl shadow-md transition-all duration-200 cursor-pointer text-sm tracking-wide transform hover:-translate-y-0.5">
+                    Jalankan Sistem Analisis
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400 font-medium w-full">
+        &copy; 2026 PlagiarisScan. Pengolah Data Berbasis Jaccard Similarity & Sastrawi Stemmer.
+    </footer>
+
+</body>
+</html>

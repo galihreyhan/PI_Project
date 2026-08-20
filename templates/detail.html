@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Detail Perbandingan: {{ item.dokumen_asli }} vs {{ item.dokumen_uji }}</h3>
+  <p>Skor Kemiripan: <b>{{ item.skor }}%</b> — Status: <b>{{ item.status }}</b></p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Dokumen Asli</h5>
+      <div class="p-3 border rounded" style="line-height:1.8">
+        {% for s in sentences1 %}
+          {% if loop.index0 in matched1 %}
+            <mark class="plagiat">{{ s }}</mark>
+          {% else %}
+            {{ s }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h5>Dokumen Uji</h5>
+      <div class="p-3 border rounded" style="line-height:1.8">
+        {% for s in sentences2 %}
+          {% if loop.index0 in matched2 %}
+            <mark class="plagiat">{{ s }}</mark>
+          {% else %}
+            {{ s }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <h5>Pasangan Kalimat Terdeteksi Mirip</h5>
+  <table class="table table-sm table-bordered">
+    <thead><tr><th>Kalimat Asli</th><th>Kalimat Uji</th><th>Skor</th></tr></thead>
+    <tbody>
+      {% for p in pairs %}
+      <tr>
+        <td>{{ p.kalimat_asli }}</td>
+        <td>{{ p.kalimat_uji }}</td>
+        <td>{{ p.skor }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ url_for('riwayat') }}" class="btn btn-secondary">← Kembali</a>
+</div>
+
+<style>
+.plagiat {
+  background-color: #ffe08a;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+</style>
+{% endblock %}
