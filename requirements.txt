@@ -1,2 +1,5 @@
 Flask
 gunicorn
+Sastrawi
+pypdf
+reportlab
